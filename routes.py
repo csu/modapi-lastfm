@@ -9,7 +9,7 @@ import secrets
 
 module = Blueprint(config['module_name'], __name__)
 
-def perform_scrobbles_backup():
+def perform_scrobbles_backup(send_notification):
     base_url = 'http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&api_key=%s&user=%s&format=json' % (secrets.LASTFM_API_KEY, secrets.LASTFM_USER)
 
     items = []
@@ -23,13 +23,16 @@ def perform_scrobbles_backup():
 
     uploader.quick_upload({'items': items},
         file_prefix='lastfm', folder=secrets.BACKUP_FOLDER_ID)
-    notifier.quick_send('Backed up %s Last.fm scrobbles.' % len(items))
+
+    if send_notification:
+        notifier.quick_send('Backed up %s Last.fm scrobbles.' % len(items))
 
 @module.route('/backup')
 @module.route('/backup/')
 @require_secret
 def backup_all_scrobbles():
-    t = Thread(target=perform_scrobbles_backup, args=[])
+    send_notification = request.args.get('notify') is not None
+    t = Thread(target=perform_scrobbles_backup, args=[send_notification])
     t.start()
 
     return jsonify({
