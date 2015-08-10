@@ -1,7 +1,6 @@
 from threading import Thread
 
 from flask import Blueprint, jsonify
-import requests
 
 from common import require_secret
 from config import config
@@ -10,6 +9,7 @@ import secrets
 module = Blueprint(config['module_name'], __name__)
 
 def perform_scrobbles_backup(send_notification):
+    import requests
     base_url = 'http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&api_key=%s&user=%s&format=json' % (secrets.LASTFM_API_KEY, secrets.LASTFM_USER)
 
     items = []
