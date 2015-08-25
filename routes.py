@@ -50,13 +50,11 @@ def get_today_scrobble_count():
     result = requests.get(request_url).json()
     return int(result['recenttracks']['@attr']['total'])
 
-
 @module.route('/today')
 @module.route('/today/')
 @require_secret
 def scrobbles_today():
     return jsonify({'count': get_today_scrobble_count()})
-
 
 @module.route('/today/dashboard')
 @module.route('/today/dashboard/')
