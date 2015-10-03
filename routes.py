@@ -62,7 +62,7 @@ def scrobbles_today():
 def scrobbles_today_dashboard():
     count = get_today_scrobble_count()
 
-    colors = ['#CAE2B0', '#FFCC66', '#EBAD99']
+    colors = ['#CAE2B0', '#FFCC80', '#EBAD99']
     color = colors[0]
     if count > 10:
         color = colors[1]
